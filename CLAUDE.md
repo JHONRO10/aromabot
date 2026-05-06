@@ -156,7 +156,22 @@ WhatsApp → Webhook (/aromabot_whatsapp) → Filtro (no soy yo / no grupo)
 - [x] Backend Python completo y funcional
 - [x] Subido a GitHub: `https://github.com/JHONRO10/aromabot`
 - [x] Deploy en Railway: https://web-production-f4795.up.railway.app
+- [x] UI móvil con 3 tabs: Ventas, Dashboard, Chat
+- [x] JSON n8n AromaBot creado (listo para importar)
 - [ ] Conexión WhatsApp — pendiente SIM nueva
-- [ ] Flujo n8n activo — pendiente URL de Railway
+- [ ] Flujo n8n activo — pendiente configurar webhook en Evolution API
 - [ ] Alertas automáticas de stock — siguiente fase
 - [ ] Reporte diario automático — siguiente fase
+
+---
+
+## 9. Checklist del Dashboard (OBLIGATORIO verificar antes de dar tarea por terminada)
+
+Cada vez que se modifique o cree el tab Dashboard, verificar que estén las 4 secciones:
+
+- [ ] **Perfumes en stock** — itera claves `perfumes_*` de Supabase con semáforo verde/amarillo/rojo
+- [ ] **Cajas & Stickers** — itera claves `cajas_*` y `stickers_*` con semáforo (verde >50, amarillo ≥20, rojo <20)
+- [ ] **Insumos** — muestra `tarros_60ml`, `bolsas`, `bonos`, `alcohol_ml` con semáforo
+- [ ] **Finanzas** — muestra utilidad del mes + ventas por distribuidor (steven, jairo, jeferson, yo)
+
+Si cualquiera de estas 4 secciones falta → el Dashboard está incompleto. No reportar como terminado.
