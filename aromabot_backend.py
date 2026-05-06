@@ -770,10 +770,10 @@ async def formulario_ventas():
     document.getElementById('resultado').style.display = 'none';
 
     try {
-      const res = await fetch('/chat', {
+      const res = await fetch('/venta', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mensaje })
+        body: JSON.stringify({ distribuidor: dist, productos })
       });
       const data = await res.json();
       mostrar(data.respuesta || data.error, data.ok !== false);
@@ -800,6 +800,22 @@ async def formulario_ventas():
 </script>
 </body>
 </html>"""
+
+
+@app.post("/venta")
+async def venta_directa(body: dict):
+    distribuidor = body.get("distribuidor", "")
+    productos = body.get("productos", {})
+    if not distribuidor or not productos:
+        return {"respuesta": "❌ Faltan datos: distribuidor y productos requeridos", "ok": False}
+    try:
+        resultado = registrar_venta.invoke({
+            "distribuidor_id": distribuidor,
+            "productos_json": json.dumps(productos)
+        })
+        return {"respuesta": resultado, "ok": True}
+    except Exception as e:
+        return {"respuesta": f"❌ Error: {str(e)}", "ok": False}
 
 
 @app.post("/chat")
