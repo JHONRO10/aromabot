@@ -840,6 +840,30 @@ async def health():
     return {"status": "✅ AromaBot activo", "modelo": "Llama 3.3 via Groq"}
 
 
+@app.post("/ajustar-inventario")
+async def ajustar_inventario(body: dict):
+    """
+    Ajuste de inventario real. Acepta cualquier clave/valor y los graba en Supabase.
+    Usar cuando el sistema está desincronizado con la realidad física.
+    Body: {"perfumes_invicto": 23, "tarros_60ml": 45, ...}
+    """
+    if not body:
+        return {"status": "❌ Body vacío", "ok": False}
+    try:
+        actualizados = []
+        for clave, valor in body.items():
+            set_inventario(clave, float(valor))
+            actualizados.append(f"{clave}: {valor}")
+        return {
+            "status": "✅ Inventario ajustado con valores reales",
+            "items_actualizados": len(actualizados),
+            "detalle": actualizados,
+            "ok": True
+        }
+    except Exception as e:
+        return {"status": "❌ Error", "detalle": str(e), "ok": False}
+
+
 @app.get("/init-inventario")
 async def init_inventario():
     inventario_inicial = {
