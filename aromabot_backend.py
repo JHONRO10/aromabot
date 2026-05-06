@@ -824,6 +824,38 @@ async def health():
     return {"status": "✅ AromaBot activo", "modelo": "Llama 3.3 via Groq"}
 
 
+@app.get("/init-inventario")
+async def init_inventario():
+    inventario_inicial = {
+        "perfumes_invicto": 50,
+        "perfumes_leblanc": 50,
+        "perfumes_euphoria": 50,
+        "perfumes_holiday": 50,
+        "perfumes_delphy": 50,
+        "perfumes_yara_candy": 50,
+        "perfumes_ultramale": 50,
+        "perfumes_kind_of_party": 50,
+        "cajas_euphoria": 100,
+        "cajas_passionate": 100,
+        "cajas_succesfull": 100,
+        "cajas_eternity": 100,
+        "stickers_euphoria": 100,
+        "stickers_passionate": 100,
+        "stickers_succesfull": 100,
+        "stickers_eternity": 100,
+        "bolsas": 200,
+        "bonos": 200,
+        "tarros_60ml": 100,
+        "alcohol_ml": 5000,
+    }
+    try:
+        for clave, valor in inventario_inicial.items():
+            set_inventario(clave, valor)
+        return {"status": "✅ Inventario inicial cargado", "items": len(inventario_inicial)}
+    except Exception as e:
+        return {"status": "❌ Error", "detalle": str(e)}
+
+
 def responder(mensaje: str) -> str:
     """Prueba rápida desde terminal"""
     output = aromas_bot.invoke({"messages": [HumanMessage(content=mensaje)]})
