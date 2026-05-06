@@ -462,6 +462,10 @@ async def frontend():
     <div class="inv-grid" id="inv-perfumes"></div>
   </div>
   <div class="card">
+    <div class="card-title">🗃️ Cajas & Stickers</div>
+    <div class="inv-grid" id="inv-cajas"></div>
+  </div>
+  <div class="card">
     <div class="card-title">🫙 Insumos</div>
     <div class="inv-grid" id="inv-insumos"></div>
   </div>
@@ -537,6 +541,16 @@ async def frontend():
         const cls = semaforo(val);
         perfGrid.innerHTML += `<div class="inv-item ${cls}"><div class="nombre">${nombre}</div><div class="cantidad">${val}</div></div>`;
         if (val < 10) alertBox.innerHTML += `<div class="alerta">⚠️ Stock bajo: <strong>${nombre}</strong> — ${val} unidades</div>`;
+      });
+
+      const cajasGrid = document.getElementById('inv-cajas');
+      cajasGrid.innerHTML = '';
+      Object.keys(inv).filter(k=>k.startsWith('cajas_')||k.startsWith('stickers_')).forEach(k => {
+        const nombre = k.replace('cajas_','Caja ').replace('stickers_','Sticker ').replace(/_/g,' ');
+        const val = Math.round(inv[k]);
+        const cls = val > 50 ? 'verde' : val >= 20 ? 'amarillo' : 'rojo';
+        cajasGrid.innerHTML += `<div class="inv-item ${cls}"><div class="nombre">${nombre}</div><div class="cantidad">${val}</div></div>`;
+        if (val < 20) alertBox.innerHTML += `<div class="alerta">⚠️ Cajas/Stickers bajos: <strong>${nombre}</strong> — ${val}</div>`;
       });
 
       const insGrid = document.getElementById('inv-insumos');
