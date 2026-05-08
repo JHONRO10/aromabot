@@ -13,10 +13,11 @@ Hablas SIEMPRE en español. Eres conciso, directo y usas emojis con moderación.
 • Motivar a un distribuidor    → mensaje_motivacional(distribuidor_id)
 
 ══ DISTRIBUIDORES ══
-• steven   → Steven Rojas     | $5.750/prf | Mi util: $384
-• jairo    → Jairo Jiménez    | $6.750/prf | Mi util: $1.384
-• jeferson → Jeferson Saldaña | $7.250/prf | Mi util: $1.884
-• yo       → Yo (Calle)       | $25.000/prf | Mi util: $19.634
+• steven   → Steven Rojas     | $5.750/prf | Mi util: $500
+• jairo    → Jairo Jiménez    | $6.750/prf | Mi util: $1.500
+• jeferson → Jeferson Saldaña | $7.250/prf | Mi util: $2.000
+• yo       → Yo (Calle)       | $25.000/prf | Mi util: $19.750
+(Costo fabricación: $5.250/prf — utilidad = precio_venta − $5.250)
 
 ══ PERFUMES ══
 euphoria, holiday, delphy, yara_candy, invicto, leblanc, ultramale, kind_of_party

@@ -1,9 +1,11 @@
 DISTRIBUIDORES = {
-    "steven":   {"nombre": "Steven Rojas",     "tel": "573213143902", "precio": 5750,  "mi_util": 384},
-    "jairo":    {"nombre": "Jairo Jiménez",    "tel": "573161289921", "precio": 6750,  "mi_util": 1384},
-    "jeferson": {"nombre": "Jeferson Saldaña", "tel": "573044372629", "precio": 7250,  "mi_util": 1884},
-    "yo":       {"nombre": "Yo (Calle)",       "tel": "",             "precio": 25000, "mi_util": 19634},
+    "steven":   {"nombre": "Steven Rojas",     "tel": "573213143902", "precio": 5750},
+    "jairo":    {"nombre": "Jairo Jiménez",    "tel": "573161289921", "precio": 6750},
+    "jeferson": {"nombre": "Jeferson Saldaña", "tel": "573044372629", "precio": 7250},
+    "yo":       {"nombre": "Yo (Calle)",       "tel": "",             "precio": 25000},
 }
+# mi_util se calcula dinamicamente: precio - COSTOS["perfume"]
+# Steven $500 | Jairo $1.500 | Jeferson $2.000 | Yo $19.750
 
 PERF_REF = {
     "euphoria":      "euphoria",
@@ -19,12 +21,12 @@ PERF_REF = {
 COSTOS = {
     "perfume":     5250,  # COP por perfume terminado
     "tarros_60ml": 2135,  # COP por tarro 60ml
-    "alcohol_ml":  28,    # COP por ml — basado en galon 5L ($140.000 / 5000ml)
+    "alcohol_ml":  7,     # COP por ml — galon $28.000 / 3785 ml = $7,40 (redondeado)
     "cajas":       530,   # COP por caja
     "stickers":    60,    # COP por sticker
     "bolsas":      50,    # COP por bolsa
     "bonos":       35,    # COP por bono
 }
 
-# Costo de reposicion de alcohol por galon (5 litros = 5000 ml)
-ALCOHOL_GALON_COP = 140_000
+# Costo de reposicion de alcohol: $28.000 por galon (3785 ml)
+ALCOHOL_GALON_COP = 28_000

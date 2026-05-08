@@ -3,6 +3,9 @@ from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage
 
 from data.negocio import DISTRIBUIDORES, PERF_REF, COSTOS
+
+def _util_por_perfume(dist: dict) -> int:
+    return dist["precio"] - COSTOS["perfume"]
 from db.client import get_inventario, set_inventario, get_config, set_config, registrar_pedido
 
 
@@ -157,7 +160,7 @@ def registrar_venta(distribuidor_id: str, productos_json: str) -> str:
         if nuevo_inv.get(clave) != inv_actual.get(clave):
             set_inventario(clave, valor)
     total_perfs = sum(int(v) for v in productos.values())
-    mi_utilidad = total_perfs * dist["mi_util"]
+    mi_utilidad = total_perfs * _util_por_perfume(dist)
     nueva_util  = float(get_config("utilidad_mes")) + mi_utilidad
     set_config("utilidad_mes", str(nueva_util))
     ventas_key = f"ventas_{distribuidor_id.lower()}"
@@ -222,9 +225,10 @@ def reporte_utilidades() -> str:
     for d_id, d_info in DISTRIBUIDORES.items():
         v = float(get_config(f"ventas_{d_id}"))
         if v > 0:
-            util          = v * d_info["mi_util"]
+            util_unit     = _util_por_perfume(d_info)
+            util          = v * util_unit
             ingreso_bruto = v * d_info["precio"]
-            margen        = (d_info["mi_util"] / d_info["precio"]) * 100
+            margen        = (util_unit / d_info["precio"]) * 100
             ingreso_total += ingreso_bruto
             lineas.append(
                 f"  {d_info['nombre']}: {int(v)} prf | bruto ${ingreso_bruto:,.0f} | util ${util:,.0f} ({margen:.0f}%)"
