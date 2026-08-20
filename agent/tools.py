@@ -223,6 +223,8 @@ def reporte_utilidades() -> str:
     lineas       = []
     ingreso_total = 0
     for d_id, d_info in DISTRIBUIDORES.items():
+        if d_id == "yo":
+            continue
         v = float(get_config(f"ventas_{d_id}"))
         if v > 0:
             util_unit     = _util_por_perfume(d_info)

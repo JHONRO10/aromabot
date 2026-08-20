@@ -165,6 +165,103 @@ WhatsApp → Webhook (/aromabot_whatsapp) → Filtro (no soy yo / no grupo)
 
 ---
 
+## 10. Estructura modular objetivo (refactorizar cuando el backend crezca)
+
+Actualmente todo está en `aromabot_backend.py` (MVP). Al refactorizar, seguir esta estructura:
+
+```
+aromabot/
+├── main.py                     ← FastAPI app + arranque + /health
+├── agent/
+│   ├── __init__.py
+│   ├── core.py                 ← Compilación del grafo LangGraph
+│   ├── tools.py                ← Todas las @tool definitions
+│   └── prompts.py              ← SYSTEM_PROMPT y plantillas
+├── db/
+│   ├── __init__.py
+│   └── supabase_client.py      ← Cliente Supabase + queries reutilizables
+├── api/
+│   ├── __init__.py
+│   └── routes.py               ← Todos los endpoints FastAPI
+├── models/
+│   ├── __init__.py
+│   └── schemas.py              ← Pydantic models (ChatRequest, SaleRecord)
+├── ui/
+│   └── index.html              ← UI móvil separada del Python
+├── .claude/
+│   └── commands/               ← Comandos slash del proyecto
+├── docs/                       ← Documentación técnica
+├── CLAUDE.md
+├── requirements.txt
+└── Procfile
+```
+
+**Regla:** Cada módulo importa solo lo que necesita. Sin circular imports.
+
+---
+
+## 11. Convenciones de nomenclatura
+
+### Archivos Python
+- `snake_case` siempre: `supabase_client.py`, `agent_core.py`
+- Módulos de dominio: `agent/`, `db/`, `api/`, `models/`
+- Un archivo = una responsabilidad única
+
+### Funciones y herramientas del agente
+- Herramientas: `verbo_objeto` → `consultar_inventario`, `registrar_venta`
+- Helpers internos privados: `_prefijo_underscore`
+- Pydantic models: PascalCase → `ChatRequest`, `SaleRecord`, `InventoryItem`
+
+### Variables de entorno
+- `SCREAMING_SNAKE_CASE`: `GROQ_API_KEY`, `SUPABASE_URL`, `SUPABASE_KEY`
+- No abreviar: `SUPABASE_URL` no `SB_URL`
+
+### Endpoints API
+- Sustantivos en minúsculas: `/inventario`, `/ventas`, `/health`
+- Acciones como verbos post: `POST /ventas/registrar`
+
+### Commits git
+- `feat:` nueva herramienta o feature
+- `fix:` corrección de bug
+- `refactor:` reestructuración sin cambio funcional
+- `docs:` solo documentación
+- `deploy:` cambios de config Railway/Procfile
+
+---
+
+## 12. Flujo de trabajo para features no triviales (Best-of-N)
+
+Para cualquier feature que no sea un fix simple:
+
+1. **Presentar 3 enfoques** con pros/contras y complejidad (baja/media/alta)
+2. **Esperar aprobación** del enfoque — no continuar sin respuesta
+3. **Diseñar la interfaz primero** (firma de función, endpoint, schema Pydantic)
+4. **Implementar el mínimo necesario** — sin abstracciones futuras
+5. **Documentar el patrón** en `docs/05_patrones_y_decisiones.md`
+
+Si algo falla → ajustar primero el CONTEXTO o el PROCESO, no editar el código a ciegas.
+
+---
+
+## 13. Arquitectura multiagente (próxima fase — diseñar antes de codificar)
+
+**Agentes planeados:**
+- `orquestador` — recibe mensaje WhatsApp, enruta al subagente correcto
+- `agente_inventario` — solo consulta y actualiza stock
+- `agente_ventas` — registra ventas y calcula utilidades
+- `agente_reportes` — genera reportes automáticos periódicos
+- `agente_motivacion` — mensajes personalizados a distribuidores
+
+**Protocolo de diseño obligatorio:**
+1. Definir qué mensajes maneja cada agente (sin overlap)
+2. Definir cómo se comunican (LangGraph `send()` API o subgraphs)
+3. Identificar qué estado es compartido vs local por agente
+4. Validar el diseño con Jhon antes de escribir código
+
+**Stack:** LangGraph multi-agent + Groq + Supabase compartido entre agentes
+
+---
+
 ## 9. Checklist del Dashboard (OBLIGATORIO verificar antes de dar tarea por terminada)
 
 Cada vez que se modifique o cree el tab Dashboard, verificar que estén las 4 secciones:
